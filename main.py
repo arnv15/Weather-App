@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
+from bs4 import BeautifulSoup as bs
+import requests
 sg.theme("reddit")
-
 image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#FFFFFF")]])
 info_col = sg.Column([
     [sg.Text("", key="-LOCATION-", font="Calibri 30", background_color="#FF0000", text_color="#FFFFFF", pad=0, visible=False)],
@@ -19,6 +20,7 @@ while True:
     if event == sg.WIN_CLOSED:
         break
     if event == "Enter":
+        get_weather_data(values["-INPUT-"])
         window["-LOCATION-"].update("test", visible=True)
         window["-TIME-"].update("test", visible=True)
         window["-TEMP-"].update("test", visible=True)
