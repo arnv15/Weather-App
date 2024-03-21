@@ -35,10 +35,32 @@ while True:
         break
     if event == "Enter":
         name, time, weather, temp = get_weather_data(values["-INPUT-"])
-        temp = str(temp) + "°F"
         window["-LOCATION-"].update(name, visible=True)
         window["-TIME-"].update(time, visible=True)
-        window["-TEMP-"].update(temp, visible=True)
-        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+        window["-TEMP-"].update(f"{temp}°F ({weather})", visible=True)
+
+        # sun
+        if weather in ("Sun", "Sunny", "Clear", "Clear with periodic clouds"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+
+        # part sun
+        if weather in ("Partly Sunny", "Mostly Sunny", "Partly cloudy", "Mostly cloudy", "Cloudy", "Overcast"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/partly-cloudy.png")
+
+        # rain
+        if weather in ("Rain", "Chance of Rain", "Light Rain", "Showers", "Scattered Showers", "Rain and Snow", "Hail"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+
+        # thunder
+        if weather in ("Scattered Thunderstorms", "Chance of Storms", "Storm", "Thunderstorm", "Chance of Tstorm"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+        
+        # foggy
+        if weather in ("Mist", "Dust", "Fog", "Smoke", "Haze", "Flurries"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+
+        # snow
+        if weather in ("Freezing Drizzle", "Chance of Snow", "Sleet", "Snow", "Icy", "Snow Showers"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
 
 window.close()
