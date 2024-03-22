@@ -40,27 +40,51 @@ while True:
         window["-TEMP-"].update(f"{temp}°F ({weather})", visible=True)
 
         # sun
-        if weather in ("Sun", "Sunny", "Clear", "Clear with periodic clouds"):
+        if weather in ("Sun", "Sunny", "Clear"):
             window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
 
-        # part sun
-        if weather in ("Partly Sunny", "Mostly Sunny", "Partly cloudy", "Mostly cloudy", "Cloudy", "Overcast"):
+        # periodic clouds
+        if weather in ("Clear with periodic clouds", "Mostly Sunny"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny_s_cloudy.png")
+
+        # partly cloudy
+        if weather in ("Partly Sunny", "Partly cloudy"):
             window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/partly-cloudy.png")
 
+        # cloudy
+        if weather in ("Mostly cloudy", "Cloudy", "Overcast"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/cloudy.png")
+
+        # light rain
+        if weather in ("Light Rain", "Chance of Rain"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/rain_light.png")
+
         # rain
-        if weather in ("Rain", "Chance of Rain", "Light Rain", "Showers", "Scattered Showers", "Rain and Snow", "Hail"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+        if weather in ("Rain and Snow", "Hail"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/snow_s_rain.png")
+
+        # heavy rain
+        if weather in ("Rain", "Showers", "Scattered Showers"):
+            window["-IMAGE-"].update("C:/Users/gupta/Onedrive/Pictures/Screenshots/rain.png")
 
         # thunder
-        if weather in ("Scattered Thunderstorms", "Chance of Storms", "Storm", "Thunderstorm", "Chance of Tstorm"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+        if weather in ( "Chance of Storms", "Storm", "Thunderstorm", "Chance of Tstorm", "Thunderstorms and rain"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/thunderstorms.png")
         
+        # Light thunderstorms
+        if weather in ("Scattered Thunderstorms", "Light thunderstorms and rain", "Isolated thunderstorms"):
+            window["-IMAGE-"].update("C:/Users/gupta/Onedrive/Pictures/Screenshots/rain_s_cloudy.png")
+
         # foggy
         if weather in ("Mist", "Dust", "Fog", "Smoke", "Haze", "Flurries"):
             window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
 
         # snow
         if weather in ("Freezing Drizzle", "Chance of Snow", "Sleet", "Snow", "Icy", "Snow Showers"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/snow.png")
+
+        # windy
+        if weather in ("Windy"):
+            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/windy.png")
 
 window.close()
