@@ -21,20 +21,20 @@ def get_weather_data(location):
 sg.theme("Black")
 image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#000000")]])
 info_col = sg.Column([
-    [sg.Text("", key="-LOCATION-", font="Calibri 30", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
+    [sg.Text("", key="-LOCATION-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-TIME-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
-    [sg.Text("", key="-TEMP-", font="Calibri 16", pad=(0,10), background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
+    [sg.Text("", key="-CONDITION-", font="Calibri 16", pad=0, background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
 ])
 add_info_col = sg.Column([
     [sg.Text("", key="-PRECIPITATION-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-HUMIDITY-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
-    [sg.Text("", key="-WIND-", font="Calibri 16", pad=(0,10), background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
+    [sg.Text("", key="-WIND-", font="Calibri 16", pad=0, background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
 ])
-temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 30", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)]])
+temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 40", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)]])
 
 layout = [
     [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Enter", button_color="#FFFFFF", border_width=0)],
-    [image_col, add_info_col, info_col]
+    [image_col, temperature, add_info_col, info_col]
 ]
 
 window = sg.Window("Weather", layout, background_color="black")
@@ -45,9 +45,10 @@ while True:
         break
     if event == "Enter":
         name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(values["-INPUT-"])
+        window["-TEMPERATURE-"].update(f"{temp}°F", visible=True)
         window["-LOCATION-"].update(name, visible=True)
         window["-TIME-"].update(time, visible=True)
-        window["-TEMP-"].update(f"{temp}°F ({weather})", visible=True)
+        window["-CONDITION-"].update(weather, visible=True)
         window["-PRECIPITATION-"].update(f"Precipitation: {precip}", visible=True)
         window["-HUMIDITY-"].update(f"Humidity: {humidity}", visible=True)
         window["-WIND-"].update(f"Wind Speed: {wind_speed}", visible=True)
