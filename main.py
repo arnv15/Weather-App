@@ -12,32 +12,45 @@ def get_weather_data(location):
     time = soup.find("div", attrs={"id": "wob_dts"}).text
     weather = soup.find("span", attrs={"id": "wob_dc"}).text
     temp = soup.find("span", attrs={"id": "wob_tm"}).text
-    return name, time, weather, temp
+    precip = soup.find("span", attrs={"id": "wob_pp"}).text
+    humidity = soup.find("span", attrs={"id": "wob_hm"}).text
+    wind_speed = soup.find("span", attrs={"id": "wob_ws"}).text
+    return name, time, weather, temp, precip, humidity, wind_speed
 
 
-sg.theme("reddit")
-image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#FFFFFF")]])
+sg.theme("Black")
+image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#000000")]])
 info_col = sg.Column([
-    [sg.Text("", key="-LOCATION-", font="Calibri 30", background_color="#FF0000", text_color="#FFFFFF", pad=0, visible=False)],
+    [sg.Text("", key="-LOCATION-", font="Calibri 30", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-TIME-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
-    [sg.Text("", key="-TEMP-", font="Calibri 16", pad=(0,10), background_color="#FFFFFF", text_color="#000000", justification="center", visible=False)]
+    [sg.Text("", key="-TEMP-", font="Calibri 16", pad=(0,10), background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
 ])
+add_info_col = sg.Column([
+    [sg.Text("", key="-PRECIPITATION-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
+    [sg.Text("", key="-HUMIDITY-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
+    [sg.Text("", key="-WIND-", font="Calibri 16", pad=(0,10), background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
+])
+temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 30", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)]])
+
 layout = [
-    [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Enter", button_color="#000000", border_width=0)],
-    [image_col, info_col]
+    [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Enter", button_color="#FFFFFF", border_width=0)],
+    [image_col, add_info_col, info_col]
 ]
 
-window = sg.Window("Weather", layout)
+window = sg.Window("Weather", layout, background_color="black")
 
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED:
         break
     if event == "Enter":
-        name, time, weather, temp = get_weather_data(values["-INPUT-"])
+        name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(values["-INPUT-"])
         window["-LOCATION-"].update(name, visible=True)
         window["-TIME-"].update(time, visible=True)
         window["-TEMP-"].update(f"{temp}°F ({weather})", visible=True)
+        window["-PRECIPITATION-"].update(f"Precipitation: {precip}", visible=True)
+        window["-HUMIDITY-"].update(f"Humidity: {humidity}", visible=True)
+        window["-WIND-"].update(f"Wind Speed: {wind_speed}", visible=True)
 
         # sun
         if weather in ("Sun", "Sunny", "Clear"):
@@ -56,7 +69,7 @@ while True:
             window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/cloudy.png")
 
         # light rain
-        if weather in ("Light Rain", "Chance of Rain"):
+        if weather in ("Light rain", "Chance of Rain"):
             window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/rain_light.png")
 
         # rain
