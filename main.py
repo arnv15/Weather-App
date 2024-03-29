@@ -17,6 +17,65 @@ def get_weather_data(location):
     wind_speed = soup.find("span", attrs={"id": "wob_ws"}).text
     return name, time, weather, temp, precip, humidity, wind_speed
 
+def update_info():
+    global weather
+    name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(values["-INPUT-"])
+    window["-TEMPERATURE-"].update(f"{temp}°F", visible=True)
+    window["-LOCATION-"].update(name, visible=True)
+    window["-TIME-"].update(time, visible=True)
+    window["-CONDITION-"].update(weather, visible=True)
+    window["-PRECIPITATION-"].update(f"Precipitation: {precip}", visible=True)
+    window["-HUMIDITY-"].update(f"Humidity: {humidity}", visible=True)
+    window["-WIND-"].update(f"Wind Speed: {wind_speed}", visible=True)
+
+def update_imag(weather):
+    # sun
+    if weather in ("Sun", "Sunny", "Clear"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
+
+    # periodic clouds
+    if weather in ("Clear with periodic clouds", "Mostly Sunny"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny_s_cloudy.png")
+
+    # partly cloudy
+    if weather in ("Partly Sunny", "Partly cloudy"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/partly-cloudy.png")
+
+    # cloudy
+    if weather in ("Mostly cloudy", "Cloudy", "Overcast"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/cloudy.png")
+
+    # light rain
+    if weather in ("Light rain", "Chance of Rain"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/rain_light.png")
+
+    # rain
+    if weather in ("Rain and Snow", "Hail"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/snow_s_rain.png")
+
+    # heavy rain
+    if weather in ("Rain", "Showers", "Scattered Showers"):
+        window["-IMAGE-"].update("C:/Users/gupta/Onedrive/Pictures/Screenshots/rain.png")
+
+    # thunder
+    if weather in ( "Chance of Storms", "Storm", "Thunderstorm", "Chance of Tstorm", "Thunderstorms and rain"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/thunderstorms.png")
+    
+    # Light thunderstorms
+    if weather in ("Scattered Thunderstorms", "Light thunderstorms and rain", "Isolated thunderstorms"):
+        window["-IMAGE-"].update("C:/Users/gupta/Onedrive/Pictures/Screenshots/rain_s_cloudy.png")
+
+    # foggy
+    if weather in ("Mist", "Dust", "Fog", "Smoke", "Haze", "Flurries"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/cloudy.png")
+
+    # snow
+    if weather in ("Freezing Drizzle", "Chance of Snow", "Sleet", "Snow", "Icy", "Snow Showers"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/snow.png")
+
+    # windy
+    if weather in ("Windy"):
+        window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/windy.png")
 
 sg.theme("Black")
 image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#000000")]])
@@ -25,15 +84,17 @@ info_col = sg.Column([
     [sg.Text("", key="-TIME-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-CONDITION-", font="Calibri 16", pad=0, background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
 ])
+
 add_info_col = sg.Column([
     [sg.Text("", key="-PRECIPITATION-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-HUMIDITY-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-WIND-", font="Calibri 16", pad=0, background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
 ])
+
 temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 40", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)]])
 
 layout = [
-    [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Enter", button_color="#FFFFFF", border_width=0)],
+    [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Refresh", button_color="#FFFFFF", key="-REFRESH-", visible=False, border_width=1), sg.Button("Enter", button_color="#FFFFFF", border_width=1)],
     [image_col, temperature, add_info_col, info_col]
 ]
 
@@ -41,64 +102,15 @@ window = sg.Window("Weather", layout, background_color="black")
 
 while True:
     event, values = window.read()
+    cache = []
+    cache.append(values["-INPUT-"])
     if event == sg.WIN_CLOSED:
         break
     if event == "Enter":
-        name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(values["-INPUT-"])
-        window["-TEMPERATURE-"].update(f"{temp}°F", visible=True)
-        window["-LOCATION-"].update(name, visible=True)
-        window["-TIME-"].update(time, visible=True)
-        window["-CONDITION-"].update(weather, visible=True)
-        window["-PRECIPITATION-"].update(f"Precipitation: {precip}", visible=True)
-        window["-HUMIDITY-"].update(f"Humidity: {humidity}", visible=True)
-        window["-WIND-"].update(f"Wind Speed: {wind_speed}", visible=True)
-
-        # sun
-        if weather in ("Sun", "Sunny", "Clear"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
-
-        # periodic clouds
-        if weather in ("Clear with periodic clouds", "Mostly Sunny"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny_s_cloudy.png")
-
-        # partly cloudy
-        if weather in ("Partly Sunny", "Partly cloudy"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/partly-cloudy.png")
-
-        # cloudy
-        if weather in ("Mostly cloudy", "Cloudy", "Overcast"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/cloudy.png")
-
-        # light rain
-        if weather in ("Light rain", "Chance of Rain"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/rain_light.png")
-
-        # rain
-        if weather in ("Rain and Snow", "Hail"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/snow_s_rain.png")
-
-        # heavy rain
-        if weather in ("Rain", "Showers", "Scattered Showers"):
-            window["-IMAGE-"].update("C:/Users/gupta/Onedrive/Pictures/Screenshots/rain.png")
-
-        # thunder
-        if weather in ( "Chance of Storms", "Storm", "Thunderstorm", "Chance of Tstorm", "Thunderstorms and rain"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/thunderstorms.png")
+        update_info()
+        update_imag()
+        window["-REFRESH-"].update(visible=True)
+    if event == "Refresh":
+        pass
         
-        # Light thunderstorms
-        if weather in ("Scattered Thunderstorms", "Light thunderstorms and rain", "Isolated thunderstorms"):
-            window["-IMAGE-"].update("C:/Users/gupta/Onedrive/Pictures/Screenshots/rain_s_cloudy.png")
-
-        # foggy
-        if weather in ("Mist", "Dust", "Fog", "Smoke", "Haze", "Flurries"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
-
-        # snow
-        if weather in ("Freezing Drizzle", "Chance of Snow", "Sleet", "Snow", "Icy", "Snow Showers"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/snow.png")
-
-        # windy
-        if weather in ("Windy"):
-            window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/windy.png")
-
 window.close()
