@@ -19,7 +19,7 @@ def get_weather_data(location):
 
 def update_info():
     global weather
-    name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(values["-INPUT-"])
+    name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(cache[0])
     window["-TEMPERATURE-"].update(f"{temp}°F", visible=True)
     window["-LOCATION-"].update(name, visible=True)
     window["-TIME-"].update(time, visible=True)
@@ -28,7 +28,7 @@ def update_info():
     window["-HUMIDITY-"].update(f"Humidity: {humidity}", visible=True)
     window["-WIND-"].update(f"Wind Speed: {wind_speed}", visible=True)
 
-def update_imag(weather):
+def update_imag():
     # sun
     if weather in ("Sun", "Sunny", "Clear"):
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
@@ -100,10 +100,15 @@ layout = [
 
 window = sg.Window("Weather", layout, background_color="black")
 
+cache = []
+event, values = window.read()
+if values != (" " or ""): cache.append(values["-INPUT-"])
+
 while True:
     event, values = window.read()
-    cache = []
-    cache.append(values["-INPUT-"])
+    if values != (cache[0] or " " or ""): 
+        del cache[0]
+        cache.append(values["-INPUT-"])
     if event == sg.WIN_CLOSED:
         break
     if event == "Enter":
