@@ -38,7 +38,7 @@ def update_imag():
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny_s_cloudy.png")
 
     # partly cloudy
-    if weather in ("Partly Sunny", "Partly cloudy"):
+    if weather in ("Partly Sunny", "Partly cloudy", "Cloudy periodically clear"):
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/partly-cloudy.png")
 
     # cloudy
@@ -62,7 +62,7 @@ def update_imag():
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/thunderstorms.png")
     
     # Light thunderstorms
-    if weather in ("Scattered Thunderstorms", "Light thunderstorms and rain", "Isolated thunderstorms"):
+    if weather in ("Scattered Thunderstorms", "Light thunderstorms and rain", "Isolated thunderstorms", "Cloudy with periodic rain"):
         window["-IMAGE-"].update("C:/Users/gupta/Onedrive/Pictures/Screenshots/rain_s_cloudy.png")
 
     # foggy
@@ -112,9 +112,13 @@ while True:
     if event == sg.WIN_CLOSED:
         break
     if event == "Enter":
-        update_info()
-        update_imag()
-        window["-REFRESH-"].update(visible=True)
+        try:
+            update_info()
+        except Exception as e:
+            print(e)
+        else: 
+            update_imag()
+            window["-REFRESH-"].update(visible=True)
     if event == "Refresh":
         pass
         
