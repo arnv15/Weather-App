@@ -32,7 +32,7 @@ def update_info():
     window["-WIND-"].update(f"Wind Speed: {wind_speed}", visible=True)
 
 def update_imag():
-    window["-IMAGE-"].update(visible=False)
+    window["-IMAGE-"].update(visible=True)
     # sun
     if weather in ("Sun", "Sunny", "Clear"):
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
@@ -91,8 +91,8 @@ def in_case_of_error():
     window["-HUMIDITY-"].update(visible=False)
     window["-WIND-"].update(visible=False)
     window["-IMAGE-"].update(visible=False)
+    window["-REFRESH-"].update(visible=False)
     window["-ERRORMSG-"].update(text, visible=True)
-    window["-INPUT-"].update("")
 
 sg.theme("Black")
 image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#000000")]])
@@ -112,7 +112,7 @@ temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 40", ba
 
 layout = [
     [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Refresh", button_color="#FFFFFF", key="-REFRESH-", visible=False, border_width=1), sg.Button("Enter", button_color="#FFFFFF", border_width=1)],
-    [sg.Text("", background_color="#000000", text_color="#FFFFFF", font="Calibri 20", visible=False, justification="center", key="-ERRORMSG-", pad=(10, 5))],
+    [sg.Text("", background_color="#000000", text_color="#FFFFFF", font="Calibri 20", visible=False, justification="center bottom", key="-ERRORMSG-")],
     [image_col, temperature, add_info_col, info_col]
 ]
 
@@ -120,15 +120,16 @@ window = sg.Window("Weather", layout, background_color="black")
 
 cache = []
 event, values = window.read()
-if values != (" " or ""): cache.append(values["-INPUT-"])
+if values != (" " or ""): 
+    cache.append(values["-INPUT-"])
 
 while True:
     event, values = window.read()
-    if values != (cache[0] or " " or ""): 
-        del cache[0]
-        cache.append(values["-INPUT-"])
     if event == sg.WIN_CLOSED:
         break
+    if values != cache[0] or values != " " or values != "": 
+        del cache[0]
+        cache.append(values["-INPUT-"])
     if event == "Enter":
         try:
             get_data()
