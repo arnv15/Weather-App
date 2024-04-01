@@ -108,7 +108,7 @@ temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 40", ba
 
 layout = [
     [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Refresh", button_color="#FFFFFF", key="-REFRESH-", visible=False, border_width=1), sg.Button("Enter", button_color="#FFFFFF", border_width=1)],
-    [sg.Text("", background_color="#000000", text_color="FFFFFF", visible=False, key="-ERRORMSG-")]
+    [sg.Text("", background_color="#000000", text_color="FFFFFF", visible=False, key="-ERRORMSG-")],
     [image_col, temperature, add_info_col, info_col]
 ]
 
