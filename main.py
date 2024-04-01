@@ -22,6 +22,7 @@ def get_data():
     name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(cache[0])
 
 def update_info():
+    window["-ERRORMSG-"].update(visible=False)
     window["-TEMPERATURE-"].update(f"{temp}°F", visible=True)
     window["-LOCATION-"].update(name, visible=True)
     window["-TIME-"].update(time, visible=True)
@@ -31,6 +32,7 @@ def update_info():
     window["-WIND-"].update(f"Wind Speed: {wind_speed}", visible=True)
 
 def update_imag():
+    window["-IMAGE-"].update(visible=False)
     # sun
     if weather in ("Sun", "Sunny", "Clear"):
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/sunny.png")
@@ -80,7 +82,7 @@ def update_imag():
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/windy.png")
     
 def in_case_of_error():
-    text = f"No results for {cache[0]}"
+    text = f"No results for \"{cache[0]}\""
     window["-TEMPERATURE-"].update(visible=False)
     window["-LOCATION-"].update(visible=False)
     window["-TIME-"].update(visible=False)
@@ -88,7 +90,9 @@ def in_case_of_error():
     window["-PRECIPITATION-"].update(visible=False)
     window["-HUMIDITY-"].update(visible=False)
     window["-WIND-"].update(visible=False)
+    window["-IMAGE-"].update(visible=False)
     window["-ERRORMSG-"].update(text, visible=True)
+    window["-INPUT-"].update("")
 
 sg.theme("Black")
 image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#000000")]])
@@ -108,7 +112,7 @@ temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 40", ba
 
 layout = [
     [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Refresh", button_color="#FFFFFF", key="-REFRESH-", visible=False, border_width=1), sg.Button("Enter", button_color="#FFFFFF", border_width=1)],
-    [sg.Text("", background_color="#000000", text_color="#FFFFFF", visible=False, key="-ERRORMSG-")],
+    [sg.Text("", background_color="#000000", text_color="#FFFFFF", font="Calibri 20", visible=False, justification="center", key="-ERRORMSG-", pad=(10, 5))],
     [image_col, temperature, add_info_col, info_col]
 ]
 
