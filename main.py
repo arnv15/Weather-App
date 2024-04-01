@@ -17,9 +17,11 @@ def get_weather_data(location):
     wind_speed = soup.find("span", attrs={"id": "wob_ws"}).text
     return name, time, weather, temp, precip, humidity, wind_speed
 
-def update_info():
-    global weather
+def get_data():
+    global name, time, weather, temp, precip, humidity, wind_speed
     name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(cache[0])
+
+def update_info():
     window["-TEMPERATURE-"].update(f"{temp}°F", visible=True)
     window["-LOCATION-"].update(name, visible=True)
     window["-TIME-"].update(time, visible=True)
@@ -76,6 +78,17 @@ def update_imag():
     # windy
     if weather in ("Windy"):
         window["-IMAGE-"].update("C:/Users/gupta/OneDrive/Pictures/Screenshots/windy.png")
+    
+def in_case_of_error():
+    text = f"No results for {cache[0]}"
+    window["-TEMPERATURE-"].update(visible=False)
+    window["-LOCATION-"].update(visible=False)
+    window["-TIME-"].update(visible=False)
+    window["-CONDITION-"].update(visible=False)
+    window["-PRECIPITATION-"].update(visible=False)
+    window["-HUMIDITY-"].update(visible=False)
+    window["-WIND-"].update(visible=False)
+    window["-ERRORMSG-"].update(text, visible=True)
 
 sg.theme("Black")
 image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#000000")]])
@@ -95,6 +108,7 @@ temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 40", ba
 
 layout = [
     [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Refresh", button_color="#FFFFFF", key="-REFRESH-", visible=False, border_width=1), sg.Button("Enter", button_color="#FFFFFF", border_width=1)],
+    [sg.Text("", background_color="#000000", text_color="FFFFFF", visible=False, key="-ERRORMSG-")]
     [image_col, temperature, add_info_col, info_col]
 ]
 
@@ -113,13 +127,16 @@ while True:
         break
     if event == "Enter":
         try:
-            update_info()
+            get_data()
         except Exception as e:
+            in_case_of_error()
             print(e)
         else: 
+            update_info()
             update_imag()
             window["-REFRESH-"].update(visible=True)
     if event == "Refresh":
-        pass
+        update_info()
+        update_imag()
         
 window.close()
