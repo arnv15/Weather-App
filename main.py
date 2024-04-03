@@ -8,23 +8,23 @@ def get_weather_data(location):
     session.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
     html = session.get(url)
     soup = bs(html.text, "html.parser")
-    name = soup.find("div", attrs={"id": "wob_loc"}).text
+    # name = soup.find("div", attrs={"id": "wob_loc"}).text
     time = soup.find("div", attrs={"id": "wob_dts"}).text
     weather = soup.find("span", attrs={"id": "wob_dc"}).text
     temp = soup.find("span", attrs={"id": "wob_tm"}).text
     precip = soup.find("span", attrs={"id": "wob_pp"}).text
     humidity = soup.find("span", attrs={"id": "wob_hm"}).text
     wind_speed = soup.find("span", attrs={"id": "wob_ws"}).text
-    return name, time, weather, temp, precip, humidity, wind_speed
+    return time, weather, temp, precip, humidity, wind_speed
 
 def get_data():
-    global name, time, weather, temp, precip, humidity, wind_speed
-    name, time, weather, temp, precip, humidity, wind_speed = get_weather_data(cache[0])
+    global time, weather, temp, precip, humidity, wind_speed
+    time, weather, temp, precip, humidity, wind_speed = get_weather_data(cache[0])
 
 def update_info():
-    window["-ERRORMSG-"].update(visible=False)
+    window["-ERRORMSG-"].update(f"                 Results for \"{cache[0]}\"", visible=True)
     window["-TEMPERATURE-"].update(f"{temp}°F", visible=True)
-    window["-LOCATION-"].update(name, visible=True)
+    # window["-LOCATION-"].update(name, visible=True)
     window["-TIME-"].update(time, visible=True)
     window["-CONDITION-"].update(weather, visible=True)
     window["-PRECIPITATION-"].update(f"Precipitation: {precip}", visible=True)
@@ -84,7 +84,7 @@ def update_imag():
 def in_case_of_error():
     text = f"No results for \"{cache[0]}\""
     window["-TEMPERATURE-"].update(visible=False)
-    window["-LOCATION-"].update(visible=False)
+    # window["-LOCATION-"].update(visible=False)
     window["-TIME-"].update(visible=False)
     window["-CONDITION-"].update(visible=False)
     window["-PRECIPITATION-"].update(visible=False)
@@ -97,7 +97,7 @@ def in_case_of_error():
 sg.theme("Black")
 image_col = sg.Column([[sg.Image(key="-IMAGE-", background_color="#000000")]])
 info_col = sg.Column([
-    [sg.Text("", key="-LOCATION-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
+    # [sg.Text("", key="-LOCATION-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-TIME-", font="Calibri 16", background_color="#000000", text_color="#FFFFFF", pad=0, visible=False)],
     [sg.Text("", key="-CONDITION-", font="Calibri 16", pad=0, background_color="#000000", text_color="#FFFFFF", justification="center", visible=False)]
 ])
@@ -112,7 +112,7 @@ temperature = sg.Column([[sg.Text("", key="-TEMPERATURE-", font="Calibri 40", ba
 
 layout = [
     [sg.Input(expand_x=True, key="-INPUT-"), sg.Button("Refresh", button_color="#FFFFFF", key="-REFRESH-", visible=False, border_width=1), sg.Button("Enter", button_color="#FFFFFF", border_width=1)],
-    [sg.Text("", background_color="#000000", text_color="#FFFFFF", font="Calibri 20", visible=False, justification="center bottom", key="-ERRORMSG-")],
+    [sg.Text("", background_color="#000000", text_color="#FFFFFF", font="Calibri 20", visible=False, justification="center", key="-ERRORMSG-", pad=((75, 75), (0, 0)))],
     [image_col, temperature, add_info_col, info_col]
 ]
 
@@ -135,7 +135,7 @@ while True:
             get_data()
         except Exception as e:
             in_case_of_error()
-            print(e)
+            # print(e)
         else: 
             update_info()
             update_imag()
