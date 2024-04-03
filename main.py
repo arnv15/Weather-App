@@ -142,6 +142,5 @@ while True:
             window["-REFRESH-"].update(visible=True)
     if event == "Refresh":
         update_info()
-        update_imag()
-        
+        update_imag()        
 window.close()
